@@ -5,6 +5,8 @@ productos = []
 
 def agregar_producto():
 
+    print("\n====== AGREGAR PRODUCTO =====")
+
     try:
         nombre = input("Nombre del producto: \n").strip()
         
@@ -45,37 +47,68 @@ def agregar_producto():
 
 
 
+def mostrar_productos():
+    print("\n===== LISTA DE PRODUCTOS =====")
+
+    if not productos:
+        print("No hay productos registrados.")
+        return
+
+    for indice, producto in enumerate(productos, start=1):
+        print(f"""
+        Producto #{indice}
+        Nombre: {producto["nombre"]}
+        Precio: {producto["precio"]:.2f}
+        Cantidad: {producto["cantidad"]}
+        -------------------------------
+    """)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def mostrar_producto():
-    print()
 
 def buscar_producto():
-    print()
+    print("\n===== BUSCAR PRODUCTO =====")
+
+    if not productos:
+            print("No hay productos registrados.")
+            return
+
+    nombre_buscado = input("Ingrese el nombre del producto: ").strip()
+
+    for producto in productos:
+        if producto["nombre"].lower() == nombre_buscado.lower():
+            print("\nProducto encontrado:")
+            print (f"Nombre: {producto['nombre']}")
+            print(f"Precio: ${producto['precio']:.2f}")
+            print(f"Cantidad: {producto['cantidad']}")
+            return
+
+
+    print("Producto no encontrado.")
+
+
 
 def eliminar_producto():
-    print()
+    print("\n===== ELIMINAR PRODUCTO =====")
 
-def buscar_por_precio():
-    print()
+    if not productos:
+        print("No hay productos registrados.")
+        return
+
+    nombre_buscado = input("Ingrese el nombre del producto: ").strip()
+
+
+
+def buscar_por_precio(productos , precio_maximo):
+
+    encontrados = []
+
+    for producto in productos:
+        if producto ["precio"] <= precio_maximo:
+            encontrados.append(producto)
+
+    return encontrados
+
+
 
 def mostrar_estadisticas():
     print()

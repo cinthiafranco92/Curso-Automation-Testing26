@@ -16,18 +16,26 @@ def index():
      while True:
           mostrar_menu()
 
-          op = input("Seleccionar: ").strip()
+          op = input("Seleccionar : ").strip()
 
           match op:
                case "1":
                     agregar_producto()
-
-                    
-
-
-
-
-
+               case "2":
+                    mostrar_productos()
+               case "3":
+                    buscar_producto()
+               case "4":
+                    eliminar_producto()
+               case "5":
+                    buscar_por_precio()
+               case "6":
+                    mostrar_estadisticas()
+               case "7":
+                    print("\nPrograma finalizado.")
+                    break
+               case _ :
+                    print("\nOpción inválida.")
 
 
 
