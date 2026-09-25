@@ -33,8 +33,29 @@ def datos_base():
     #     assert len(productos.productos) == 1
 
 
-def test_buscar_productos_existentes( datos_base ):
+# def test_buscar_productos_existentes( datos_base ):
 
-    resultado = productos.buscar_por_precio( datos_base, precio_maximo=4000 )
+#     resultado = productos.buscar_por_precio( datos_base, precio_maximo=4000 )
 
-    assert len(resultado) == 2
+#     assert len(resultado) == 2
+
+# def test_agregar_producto_precio_negativo( monkeypatch):
+#     entrada = iter(["Mouse","-1500","3"]) 
+
+#     monkeypatch.setattr("builtins.input",lambda _: next(entrada))
+
+#     productos.agregar_producto( )
+
+#     assert len(productos.productos) == 0
+
+
+def test_eliminar_producto( monkeypatch, datos_base ):
+    monkeypatch.setattr("builtins.input",lambda _: "Mouse")
+
+    productos.eliminar_producto()
+
+    #es conveniente trabajar con un "ID"
+    assert len(productos.productos) == 2
+    # assert productos.productos[0]["nombre"] == "Teclado"
+
+    

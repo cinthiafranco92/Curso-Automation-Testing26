@@ -33,10 +33,7 @@ def agregar_producto():
 
         productos.append(producto)
 
-        print(f"Producto: '{producto}' se agrego correctamente.")
-
-
-
+        print(f"Producto: '{producto['nombre']}' se agrego correctamente.")
 
 
 
@@ -96,6 +93,17 @@ def eliminar_producto():
 
     nombre_buscado = input("Ingrese el nombre del producto: ").strip()
 
+    for producto in productos:
+        if producto["nombre"].lower() == nombre_buscado.lower():
+            productos.remove(producto)
+
+            print(
+                f"Producto '{producto['nombre']}' "
+                "eliminado correctamente."
+            )
+            return
+
+    print("Producto no encontrado.")
 
 
 def buscar_por_precio(productos , precio_maximo):
