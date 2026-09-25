@@ -2,53 +2,73 @@ import pytest
 import productos
 
 
-# decoradores
-@pytest.fixture(autouse=True)
-def limpiar_productos():
-    productos.productos.clear()
-    yield # => se ejecuta los test de prueba
-    productos.productos.clear()
+@pytest.mark.busqueda
+@pytest.mark.parametrize("datos_entradas,resultado_esperado",[
+    (["Mouse","1500","3"] ,
+    {"nombre":"Mouse","precio":1500.0,"cantidad":3}
+    ),
+    (
+        ["Teclado","5000","3"] ,
+        {"nombre":"Teclado","precio":5000.0,"cantidad":3}),
+    (
+        ["Parlante","3000","3"] ,
+        {"nombre":"Parlante","precio":3000.0,"cantidad":3})
+    
+    ]
+)
+def test_agregar_producto_exito( monkeypatch, datos_entradas, resultado_esperado ):
+    
+    entrada = iter(datos_entradas) #usuario, tester
+    
+    monkeypatch.setattr("builtins.input",lambda _: next(entrada))
+
+    productos.agregar_producto()
+
+    assert len(productos.productos) == 1
+    assert productos.productos[0] == resultado_esperado
 
 
-@pytest.fixture
-def datos_base():
-    productos.productos.extend([
-        {"nombre":"Mouse","precio":1000,"cantidad":3},
-        {"nombre":"Teclado","precio":5000,"cantidad":2},
-        {"nombre":"Parlante","precio":3000,"cantidad":5}   
-    ])
+# CASO DE VALIDACIONES
+@pytest.mark.parametrize("entradas_invalidas",[
+    ["","3000","3"] , #nombre vacio
+    ["Parlante","-3000","3"] , #precio negativo
+    ["Parlante","3000","-3"] , #cantidad negativa
+])
+def test_agregar_producto_errores(monkeypatch, entradas_invalidas):
+    entrada = iter(entradas_invalidas) #usuario, tester
+    monkeypatch.setattr("builtins.input",lambda _: next(entrada))
 
-    return productos.productos
-
-
-
-    # def test_agregar_producto_exito( monkeypatch ):
-
-    #     entrada = iter(["Mouse","1500","3"]) #usuario, tester
-
-    #     monkeypatch.setattr("builtins.input",lambda _: next(entrada))
-
-    #     productos.agregar_producto()
-
-    #     assert len(productos.productos) == 1
+    productos.agregar_producto()
+    assert len(productos.productos) == 0
 
 
-# def test_buscar_productos_existentes( datos_base ):
+def test_agregar_producto_exitos( monkeypatch ):
 
-#     resultado = productos.buscar_por_precio( datos_base, precio_maximo=4000 )
+    entrada = iter(["Mouse","1500","3"]) #usuario, tester
 
-#     assert len(resultado) == 2
+    monkeypatch.setattr("builtins.input",lambda _: next(entrada))
 
-# def test_agregar_producto_precio_negativo( monkeypatch):
-#     entrada = iter(["Mouse","-1500","3"]) 
+    productos.agregar_producto()
 
-#     monkeypatch.setattr("builtins.input",lambda _: next(entrada))
-
-#     productos.agregar_producto( )
-
-#     assert len(productos.productos) == 0
+    assert len(productos.productos) > 0
 
 
+def test_buscar_productos_existentes( datos_base ):
+
+    resultado = productos.buscar_por_precio( datos_base, precio_maximo=4000 )
+
+    assert len(resultado) == 2
+
+def test_agregar_producto_precio_negativo( monkeypatch):
+    entrada = iter(["Mouse","-1500","3"]) 
+
+    monkeypatch.setattr("builtins.input",lambda _: next(entrada))
+
+    productos.agregar_producto( )
+
+    assert len(productos.productos) == 0
+
+@pytest.mark.eliminar_producto
 def test_eliminar_producto( monkeypatch, datos_base ):
     monkeypatch.setattr("builtins.input",lambda _: "Mouse")
 
@@ -56,6 +76,6 @@ def test_eliminar_producto( monkeypatch, datos_base ):
 
     #es conveniente trabajar con un "ID"
     assert len(productos.productos) == 2
-    # assert productos.productos[0]["nombre"] == "Teclado"
+    assert productos.productos[0]["nombre"] == "Teclado"
 
     
