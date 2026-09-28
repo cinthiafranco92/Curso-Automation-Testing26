@@ -119,4 +119,21 @@ def buscar_por_precio(productos , precio_maximo):
 
 
 def mostrar_estadisticas():
-    print()
+    print("\n===== ESTADÍSTICAS =====")
+
+    if not productos:
+        print("No hay productos registrados.")
+        return
+
+    cantidad_productos = len(productos)
+
+    valor_total = 0
+
+    for producto in productos:
+        valor_total += (
+            producto["precio"] *
+            producto["cantidad"]
+        )
+
+    print(f"Cantidad de productos: {cantidad_productos}")
+    print(f"Valor total del inventario: ${valor_total:.2f}")
